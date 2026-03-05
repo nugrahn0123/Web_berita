@@ -54,6 +54,21 @@
 			letter-spacing: 0.2px;
 		}
 
+		.brand-wrap {
+			display: flex;
+			align-items: center;
+			gap: 10px;
+		}
+
+		.logo {
+			width: 44px;
+			height: 44px;
+			border-radius: 10px;
+			object-fit: cover;
+			background: #fff;
+			padding: 2px;
+		}
+
 		.date {
 			font-size: 0.88rem;
 			color: #d1d5db;
@@ -293,6 +308,12 @@
 				flex-direction: column;
 			}
 
+			.logo {
+				width: 38px;
+				height: 38px;
+				border-radius: 8px;
+			}
+
 			.slide img {
 				height: 225px;
 			}
@@ -330,7 +351,10 @@
 
 	<header class="topbar">
 		<div class="container topbar-inner">
-			<h1 class="brand">Portal Berita Organisasi</h1>
+			<div class="brand-wrap">
+				<img class="logo" src="WhatsApp%20Image%202026-03-05%20at%2020.52.58.jpeg" alt="Logo Portal Berita Organisasi">
+				<h1 class="brand">Portal Berita Organisasi</h1>
+			</div>
 			<div class="date">Kamis, 5 Maret 2026</div>
 		</div>
 	</header>
