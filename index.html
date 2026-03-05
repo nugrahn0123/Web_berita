@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Portal Berita Organisasi</title>
+
+	<style>
+		:root {
+			--bg: #f3f5f8;
+			--surface: #ffffff;
+			--primary: #111827;
+			--secondary: #1f2937;
+			--accent: #c1121f;
+			--muted: #6b7280;
+			--border: #e5e7eb;
+		}
+
+		* {
+			box-sizing: border-box;
+		}
+
+		body {
+			margin: 0;
+			font-family: "Segoe UI", Roboto, Arial, sans-serif;
+			background: var(--bg);
+			color: var(--primary);
+			line-height: 1.65;
+		}
+
+		.topbar {
+			background: var(--secondary);
+			color: #fff;
+			border-bottom: 3px solid var(--accent);
+		}
+
+		.container {
+			width: min(1080px, 92%);
+			margin: 0 auto;
+		}
+
+		.topbar-inner {
+			padding: 14px 0;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			gap: 12px;
+		}
+
+		.brand {
+			margin: 0;
+			font-size: 1.15rem;
+			font-weight: 700;
+			letter-spacing: 0.2px;
+		}
+
+		.date {
+			font-size: 0.88rem;
+			color: #d1d5db;
+			white-space: nowrap;
+		}
+
+		nav {
+			background: #1a1f2a;
+			border-bottom: 1px solid #252c39;
+		}
+
+		.menu {
+			margin: 0;
+			padding: 10px 0;
+			list-style: none;
+			display: flex;
+			gap: 16px;
+			overflow-x: auto;
+			scrollbar-width: thin;
+		}
+
+		.menu a {
+			text-decoration: none;
+			color: #e5e7eb;
+			font-weight: 600;
+			font-size: 0.92rem;
+			white-space: nowrap;
+			transition: color 0.25s ease;
+		}
+
+		.menu a:hover {
+			color: #fff;
+		}
+
+		.main {
+			padding: 22px 0 32px;
+		}
+
+		.section-title {
+			margin: 0 0 14px;
+			font-size: 1.2rem;
+			color: var(--secondary);
+		}
+
+		.headline-slider {
+			position: relative;
+			border-radius: 14px;
+			overflow: hidden;
+			background: var(--surface);
+			border: 1px solid var(--border);
+			box-shadow: 0 10px 30px rgba(17, 24, 39, 0.08);
+			margin-bottom: 24px;
+		}
+
+		.slides {
+			display: flex;
+			transition: transform 0.6s ease-in-out;
+		}
+
+		.slide {
+			min-width: 100%;
+			position: relative;
+		}
+
+		.slide img {
+			width: 100%;
+			height: 360px;
+			object-fit: cover;
+			display: block;
+		}
+
+		.slide-overlay {
+			position: absolute;
+			inset: auto 0 0;
+			padding: 18px;
+			background: linear-gradient(to top, rgba(0, 0, 0, 0.68), transparent);
+			color: #fff;
+		}
+
+		.slide-overlay h2 {
+			margin: 0 0 6px;
+			font-size: 1.35rem;
+			line-height: 1.35;
+		}
+
+		.slide-overlay p {
+			margin: 0;
+			font-size: 0.95rem;
+			color: #f3f4f6;
+		}
+
+		.slider-btn {
+			position: absolute;
+			top: 50%;
+			transform: translateY(-50%);
+			border: none;
+			width: 38px;
+			height: 38px;
+			border-radius: 50%;
+			background: rgba(17, 24, 39, 0.65);
+			color: #fff;
+			cursor: pointer;
+			font-size: 1rem;
+			transition: background 0.25s ease;
+			z-index: 2;
+		}
+
+		.slider-btn:hover {
+			background: rgba(17, 24, 39, 0.92);
+		}
+
+		.slider-btn.prev {
+			left: 10px;
+		}
+
+		.slider-btn.next {
+			right: 10px;
+		}
+
+		.dots {
+			position: absolute;
+			left: 50%;
+			bottom: 12px;
+			transform: translateX(-50%);
+			display: flex;
+			gap: 8px;
+			z-index: 2;
+		}
+
+		.dot {
+			width: 9px;
+			height: 9px;
+			border-radius: 50%;
+			border: none;
+			background: rgba(255, 255, 255, 0.55);
+			cursor: pointer;
+		}
+
+		.dot.active {
+			background: #fff;
+			transform: scale(1.15);
+		}
+
+		.news-layout {
+			display: grid;
+			grid-template-columns: 2fr 1fr;
+			gap: 18px;
+		}
+
+		.card {
+			background: var(--surface);
+			border: 1px solid var(--border);
+			border-radius: 12px;
+			padding: 18px;
+			box-shadow: 0 8px 24px rgba(17, 24, 39, 0.05);
+		}
+
+		.card img {
+			width: 100%;
+			border-radius: 10px;
+			margin: 12px 0 14px;
+		}
+
+		.meta {
+			margin: 0 0 8px;
+			color: var(--muted);
+			font-size: 0.9rem;
+		}
+
+		.headline {
+			margin: 0;
+			font-size: 1.35rem;
+			line-height: 1.4;
+			color: var(--secondary);
+		}
+
+		.side-list {
+			display: grid;
+			gap: 10px;
+		}
+
+		.side-item {
+			border-bottom: 1px solid var(--border);
+			padding-bottom: 10px;
+		}
+
+		.side-item:last-child {
+			border-bottom: none;
+			padding-bottom: 0;
+		}
+
+		.side-item h4 {
+			margin: 0 0 6px;
+			font-size: 0.98rem;
+			line-height: 1.35;
+		}
+
+		.side-item p {
+			margin: 0;
+			color: var(--muted);
+			font-size: 0.88rem;
+		}
+
+		.reveal {
+			opacity: 0;
+			transform: translateY(16px);
+			transition: opacity 0.55s ease, transform 0.55s ease;
+		}
+
+		.reveal.show {
+			opacity: 1;
+			transform: translateY(0);
+		}
+
+		footer {
+			margin-top: 28px;
+			background: #111827;
+			color: #d1d5db;
+			text-align: center;
+			padding: 18px;
+			font-size: 0.9rem;
+		}
+
+		@media (max-width: 900px) {
+			.news-layout {
+				grid-template-columns: 1fr;
+			}
+
+			.slide img {
+				height: 300px;
+			}
+		}
+
+		@media (max-width: 640px) {
+			.topbar-inner {
+				align-items: flex-start;
+				flex-direction: column;
+			}
+
+			.slide img {
+				height: 225px;
+			}
+
+			.slide-overlay {
+				padding: 14px;
+			}
+
+			.slide-overlay h2 {
+				font-size: 1.05rem;
+			}
+
+			.slide-overlay p {
+				font-size: 0.84rem;
+			}
+
+			.slider-btn {
+				width: 32px;
+				height: 32px;
+			}
+
+			.headline {
+				font-size: 1.15rem;
+			}
+
+			.card {
+				padding: 14px;
+			}
+		}
+	</style>
+
+</head>
+
+<body>
+
+	<header class="topbar">
+		<div class="container topbar-inner">
+			<h1 class="brand">Portal Berita Organisasi</h1>
+			<div class="date">Kamis, 5 Maret 2026</div>
+		</div>
+	</header>
+
+	<nav>
+		<div class="container">
+			<ul class="menu">
+				<li><a href="#">Beranda</a></li>
+				<li><a href="#">Nasional</a></li>
+				<li><a href="#">Daerah</a></li>
+				<li><a href="#">Kegiatan</a></li>
+				<li><a href="#">Pengumuman</a></li>
+				<li><a href="#">Kontak</a></li>
+			</ul>
+		</div>
+	</nav>
+
+	<main class="main">
+		<div class="container">
+			<h2 class="section-title reveal">Headline Hari Ini</h2>
+
+			<section class="headline-slider reveal" aria-label="Slider headline berita">
+				<button class="slider-btn prev" aria-label="Slide sebelumnya">❮</button>
+
+				<div class="slides" id="slides">
+					<article class="slide">
+						<img src="https://picsum.photos/1200/600?random=11" alt="Program sosial organisasi di wilayah kota">
+						<div class="slide-overlay">
+							<h2>Program Sosial Komunitas Jangkau 12 Kelurahan</h2>
+							<p>Relawan dan warga berkolaborasi dalam aksi bersih lingkungan dan bantuan sosial.</p>
+						</div>
+					</article>
+
+					<article class="slide">
+						<img src="https://picsum.photos/1200/600?random=12" alt="Forum diskusi masyarakat dan organisasi">
+						<div class="slide-overlay">
+							<h2>Forum Aspirasi Warga Dibuka Setiap Akhir Pekan</h2>
+							<p>Inisiatif baru untuk menampung masukan publik dan evaluasi program secara berkala.</p>
+						</div>
+					</article>
+
+					<article class="slide">
+						<img src="https://picsum.photos/1200/600?random=13" alt="Pelatihan kepemudaan organisasi">
+						<div class="slide-overlay">
+							<h2>Pelatihan Pemuda Fokus pada Kepemimpinan Digital</h2>
+							<p>Peserta dibekali keterampilan komunikasi, literasi digital, dan manajemen proyek.</p>
+						</div>
+					</article>
+				</div>
+
+				<button class="slider-btn next" aria-label="Slide berikutnya">❯</button>
+
+				<div class="dots" id="dots">
+					<button class="dot active" aria-label="Pergi ke slide 1"></button>
+					<button class="dot" aria-label="Pergi ke slide 2"></button>
+					<button class="dot" aria-label="Pergi ke slide 3"></button>
+				</div>
+			</section>
+
+			<section class="news-layout">
+				<article class="card reveal">
+					<p class="meta">5 Maret 2026 | Tim Media Organisasi</p>
+					<h3 class="headline">Organisasi Luncurkan Program Literasi Digital untuk Pelajar</h3>
+					<img src="https://picsum.photos/1100/520?random=22" alt="Pelatihan literasi digital untuk pelajar">
+					<p>
+						MAKASSAR – Organisasi bersama mitra pendidikan meluncurkan program literasi digital bagi pelajar SMA.
+						Program ini berfokus pada keamanan siber dasar, etika bermedia sosial, dan penggunaan alat digital
+						untuk pembelajaran yang lebih produktif.
+					</p>
+					<p>
+						Kegiatan perdana diikuti lebih dari 200 peserta dan akan diperluas ke beberapa sekolah lain dalam tiga bulan ke depan.
+						Panitia menargetkan program ini menjadi agenda rutin agar pelajar memiliki kesiapan digital yang lebih baik.
+					</p>
+				</article>
+
+				<aside class="card reveal">
+					<h3 class="headline" style="font-size:1.1rem; margin-bottom:12px;">Berita Singkat</h3>
+
+					<div class="side-list">
+						<div class="side-item">
+							<h4>Posko layanan masyarakat dibuka hingga malam hari</h4>
+							<p>Fokus pada layanan administrasi cepat dan keluhan warga.</p>
+						</div>
+
+						<div class="side-item">
+							<h4>Kolaborasi UMKM lokal dorong ekonomi lingkungan</h4>
+							<p>Program pelatihan pemasaran digital akan dimulai pekan depan.</p>
+						</div>
+
+						<div class="side-item">
+							<h4>Agenda donor darah berhasil himpun ratusan kantong</h4>
+							<p>Pelaksanaan berikutnya dijadwalkan bulan depan.</p>
+						</div>
+					</div>
+				</aside>
+			</section>
+		</div>
+	</main>
+
+	<footer>
+		&copy; 2026 Portal Berita Organisasi. Semua hak dilindungi.
+	</footer>
+
+	<script>
+		const slides = document.getElementById("slides");
+		const dots = Array.from(document.querySelectorAll(".dot"));
+		const nextBtn = document.querySelector(".next");
+		const prevBtn = document.querySelector(".prev");
+
+		let currentSlide = 0;
+		const totalSlides = dots.length;
+		let autoSlide;
+
+		function updateSlider(index) {
+			currentSlide = (index + totalSlides) % totalSlides;
+			slides.style.transform = `translateX(-${currentSlide * 100}%)`;
+
+			dots.forEach((dot, i) => {
+				dot.classList.toggle("active", i === currentSlide);
+			});
+		}
+
+		function startAutoSlide() {
+			autoSlide = setInterval(() => {
+				updateSlider(currentSlide + 1);
+			}, 4500);
+		}
+
+		function resetAutoSlide() {
+			clearInterval(autoSlide);
+			startAutoSlide();
+		}
+
+		nextBtn.addEventListener("click", () => {
+			updateSlider(currentSlide + 1);
+			resetAutoSlide();
+		});
+
+		prevBtn.addEventListener("click", () => {
+			updateSlider(currentSlide - 1);
+			resetAutoSlide();
+		});
+
+		dots.forEach((dot, index) => {
+			dot.addEventListener("click", () => {
+				updateSlider(index);
+				resetAutoSlide();
+			});
+		});
+
+		startAutoSlide();
+
+		const reveals = document.querySelectorAll(".reveal");
+		const observer = new IntersectionObserver((entries) => {
+			entries.forEach((entry) => {
+				if (entry.isIntersecting) {
+					entry.target.classList.add("show");
+					observer.unobserve(entry.target);
+				}
+			});
+		}, { threshold: 0.15 });
+
+		reveals.forEach((el) => observer.observe(el));
+	</script>
+
+</body>
+</html>
